@@ -1,99 +1,72 @@
 #include <iostream>
-#include "bird.h"
+#include "bird.h"       // Contains Bird (abstract class) and sparrow
 using namespace std;
 
 
 /*
-    ABSTRACT CLASS
+    birddoesSomething()
 
-    Bird contains pure virtual functions.
-    Therefore Bird is an abstract class.
+    Bird *&bird means:
+    - bird is a pointer to Bird
+    - & means reference to that pointer
 
-    Bird tells:
-        "Every child must have eat() and fly()."
+    So the function receives the original Bird* pointer.
 */
-
-class Bird {
-public:
-    virtual void eat() = 0;
-    virtual void fly() = 0;
-};
-
-
-/*
-    CHILD CLASS
-
-    Sparrow inherits Bird.
-
-    Sparrow MUST implement:
-        eat()
-        fly()
-
-    Now Sparrow is a concrete class.
-*/
-
-class Sparrow : public Bird {
-public:
-
-    void eat() override {
-        cout << "Sparrow is eating\n";
-    }
-
-    void fly() override {
-        cout << "Sparrow is flying\n";
-    }
-};
-
-
-/*
-    FUNCTION
-
-    Bird*& means:
-        reference to a Bird pointer
-
-    The function can work with ANY object
-    that inherits from Bird.
-*/
-
 void birddoesSomething(Bird *&bird)
 {
     /*
-        bird is a Bird pointer,
-        but it actually points to a Sparrow object.
+        bird is a Bird* pointer,
+        but it actually points to a sparrow object.
 
-        Because eat() and fly() are virtual,
-        Sparrow's functions are called.
+        Since eat() and fly() are virtual functions
+        in Bird, runtime polymorphism happens.
+
+        Therefore:
+            bird->eat() -> sparrow::eat()
+            bird->fly() -> sparrow::fly()
     */
 
-    bird->eat();   // Sparrow::eat()
-    bird->fly();   // Sparrow::fly()
+    bird->eat();
+    bird->fly();
 
-    bird->eat();   // Sparrow::eat()
-    bird->fly();   // Sparrow::fly()
+    bird->eat();
+    bird->fly();
 
-    bird->eat();   // Sparrow::eat()
-    bird->fly();   // Sparrow::fly()
+    bird->eat();
+    bird->fly();
 }
 
 
 int main()
 {
     /*
-        Actual object = Sparrow
-        Pointer type   = Bird*
+        Bird* = type of pointer
+        bird  = pointer variable
+        new sparrow() = creates a Sparrow object
 
-        This is possible because:
+        So:
 
-            Sparrow IS-A Bird
+        Bird pointer
+             |
+             ↓
+        Sparrow object
+
+        This is possible because Sparrow inherits from Bird.
     */
+    Bird *bird = new sparrow();
 
-    Bird *bird = new Sparrow();
 
     /*
-        Pass Bird pointer to function.
-    */
+        Pass the Bird pointer to the function.
 
+        Inside the function, because of virtual functions,
+        Sparrow's eat() and fly() will be called.
+    */
     birddoesSomething(bird);
 
+
+    /*
+        Program finished successfully.
+    */
     return 0;
 }
